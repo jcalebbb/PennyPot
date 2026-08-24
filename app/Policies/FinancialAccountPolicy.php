@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\FinancialAccount;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class FinancialAccountPolicy
 {
@@ -13,7 +12,7 @@ class FinancialAccountPolicy
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,7 +20,7 @@ class FinancialAccountPolicy
      */
     public function view(User $user, FinancialAccount $financialAccount): bool
     {
-        return false;
+        return $user->id === $financialAccount->user_id;
     }
 
     /**
@@ -29,7 +28,7 @@ class FinancialAccountPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -37,7 +36,7 @@ class FinancialAccountPolicy
      */
     public function update(User $user, FinancialAccount $financialAccount): bool
     {
-        return false;
+        return $user->id === $financialAccount->user_id;
     }
 
     /**
@@ -45,7 +44,7 @@ class FinancialAccountPolicy
      */
     public function delete(User $user, FinancialAccount $financialAccount): bool
     {
-        return false;
+        return $user->id === $financialAccount->user_id;
     }
 
     /**
@@ -53,7 +52,7 @@ class FinancialAccountPolicy
      */
     public function restore(User $user, FinancialAccount $financialAccount): bool
     {
-        return false;
+        return $user->id === $financialAccount->user_id;
     }
 
     /**
@@ -61,6 +60,6 @@ class FinancialAccountPolicy
      */
     public function forceDelete(User $user, FinancialAccount $financialAccount): bool
     {
-        return false;
+        return $user->id === $financialAccount->user_id;
     }
 }

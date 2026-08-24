@@ -18,7 +18,11 @@ class FinancialAccountFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'name' => fake()->words(2, true),
+            'institution' => fake()->optional()->company(),
+            'account_type' => fake()->randomElement(FinancialAccount::ACCOUNT_TYPES),
+            'currency' => 'PHP',
+            'starting_balance' => fake()->randomFloat(2, 0, 100000),
         ];
     }
 }
