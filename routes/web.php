@@ -21,4 +21,8 @@ Volt::route('transactions', 'transactions.index')
     ->middleware(['auth'])
     ->name('transactions.index');
 
+Volt::route('categories', 'categories.index')
+    ->middleware(['auth'])
+    ->name('categories.index');
+
 require __DIR__.'/auth.php';

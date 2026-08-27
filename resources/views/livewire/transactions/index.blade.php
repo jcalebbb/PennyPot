@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\FinancialAccount;
+use App\Models\Category;
 use App\Models\Transaction;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\Auth;
@@ -11,6 +12,7 @@ use Livewire\Volt\Component;
 new #[Layout('layouts.app')] class extends Component
 {
     public ?int $financial_account_id = null;
+    public ?int $category_id = null;
     public string $type = 'expense';
     public string $description = '';
     public string $amount = '';
@@ -25,12 +27,24 @@ new #[Layout('layouts.app')] class extends Component
 
     public function getTransactionsProperty()
     {
-        return Auth::user()->transactions()->with('financialAccount')->latest('transaction_date')->latest()->get();
+        return Auth::user()->transactions()->with(['financialAccount', 'category'])->latest('transaction_date')->latest()->get();
     }
 
     public function getFinancialAccountsProperty()
     {
         return Auth::user()->financialAccounts()->orderBy('name')->get();
+    }
+
+    public function getCategoriesProperty()
+    {
+        return Auth::user()->categories()->where('type', $this->type)->orderBy('name')->get();
+    }
+
+    public function updatedType(): void
+    {
+        if ($this->category_id && ! Auth::user()->categories()->whereKey($this->category_id)->where('type', $this->type)->exists()) {
+            $this->category_id = null;
+        }
     }
 
     public function saveTransaction(): void
@@ -52,6 +66,7 @@ new #[Layout('layouts.app')] class extends Component
 
         $this->editingTransactionId = $transaction->id;
         $this->financial_account_id = $transaction->financial_account_id;
+        $this->category_id = $transaction->category_id;
         $this->type = $transaction->type;
         $this->description = $transaction->description ?? '';
         $this->amount = (string) $transaction->amount;
@@ -97,6 +112,14 @@ new #[Layout('layouts.app')] class extends Component
                 Rule::exists('financial_accounts', 'id')
                     ->where(fn (Builder $query) => $query->where('user_id', Auth::id())),
             ],
+            'category_id' => [
+                'nullable',
+                'integer',
+                Rule::exists('categories', 'id')
+                    ->where(fn (Builder $query) => $query
+                        ->where('user_id', Auth::id())
+                        ->where('type', $this->type)),
+            ],
             'type' => ['required', Rule::in(Transaction::TYPES)],
             'description' => ['nullable', 'string', 'max:255'],
             'amount' => ['required', 'numeric', 'gt:0', 'decimal:0,2'],
@@ -106,7 +129,7 @@ new #[Layout('layouts.app')] class extends Component
 
     private function resetForm(): void
     {
-        $this->reset(['financial_account_id', 'description', 'amount', 'editingTransactionId']);
+        $this->reset(['financial_account_id', 'category_id', 'description', 'amount', 'editingTransactionId']);
         $this->type = 'expense';
         $this->transaction_date = now()->toDateString();
     }
@@ -142,12 +165,23 @@ new #[Layout('layouts.app')] class extends Component
 
                     <div>
                         <x-input-label for="type" :value="__('Type')" />
-                        <select wire:model="type" id="type" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" required>
+                        <select wire:model.live="type" id="type" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" required>
                             @foreach (\App\Models\Transaction::TYPES as $transactionType)
                                 <option value="{{ $transactionType }}">{{ ucfirst($transactionType) }}</option>
                             @endforeach
                         </select>
                         <x-input-error :messages="$errors->get('type')" class="mt-2" />
+                    </div>
+
+                    <div>
+                        <x-input-label for="category_id" :value="__('Category (optional)')" />
+                        <select wire:model="category_id" id="category_id" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                            <option value="">{{ __('No category') }}</option>
+                            @foreach ($this->categories as $category)
+                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                            @endforeach
+                        </select>
+                        <x-input-error :messages="$errors->get('category_id')" class="mt-2" />
                     </div>
 
                     <div>
@@ -194,7 +228,11 @@ new #[Layout('layouts.app')] class extends Component
                         <div>
                             <h4 class="font-medium text-gray-900">{{ $transaction->description ?: ucfirst($transaction->type) }}</h4>
                             <p class="text-sm text-gray-600">
-                                {{ $transaction->financialAccount->name }} · {{ $transaction->transaction_date->format('M j, Y') }}
+                                {{ $transaction->financialAccount->name }}
+                                @if ($transaction->category)
+                                    · {{ $transaction->category->name }}
+                                @endif
+                                · {{ $transaction->transaction_date->format('M j, Y') }}
                             </p>
                             <p class="mt-1 text-sm {{ $transaction->type === 'income' ? 'text-green-600' : 'text-gray-900' }}">
                                 {{ $transaction->type === 'income' ? '+' : '-' }}{{ $transaction->financialAccount->currency }} {{ number_format((float) $transaction->amount, 2) }}
