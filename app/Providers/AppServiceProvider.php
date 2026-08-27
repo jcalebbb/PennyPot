@@ -2,9 +2,11 @@
 
 namespace App\Providers;
 
+use App\Models\Budget;
 use App\Models\Category;
 use App\Models\FinancialAccount;
 use App\Models\Transaction;
+use App\Policies\BudgetPolicy;
 use App\Policies\CategoryPolicy;
 use App\Policies\FinancialAccountPolicy;
 use App\Policies\TransactionPolicy;
@@ -26,6 +28,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Gate::policy(Budget::class, BudgetPolicy::class);
         Gate::policy(Category::class, CategoryPolicy::class);
         Gate::policy(FinancialAccount::class, FinancialAccountPolicy::class);
         Gate::policy(Transaction::class, TransactionPolicy::class);

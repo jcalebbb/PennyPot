@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Budget;
 use App\Models\Category;
 use App\Models\FinancialAccount;
 use App\Models\Transaction;
@@ -143,5 +144,32 @@ class DashboardTest extends TestCase
             ->get(route('dashboard'))
             ->assertSee('Food')
             ->assertSee('125.00');
+    }
+
+    public function test_dashboard_shows_current_month_budget_progress(): void
+    {
+        $user = User::factory()->create();
+        $account = FinancialAccount::factory()->for($user)->create(['currency' => 'PHP']);
+        $category = Category::factory()->for($user)->create(['name' => 'Food', 'type' => 'expense']);
+        Budget::factory()->for($user)->for($category)->create([
+            'amount' => '1000.00',
+            'start_date' => now()->startOfMonth()->toDateString(),
+            'end_date' => now()->endOfMonth()->toDateString(),
+            'currency' => 'PHP',
+        ]);
+        Transaction::factory()->for($user)->for($account, 'financialAccount')->create([
+            'category_id' => $category->id,
+            'type' => 'expense',
+            'amount' => '250.00',
+            'transaction_date' => now()->startOfMonth()->toDateString(),
+        ]);
+
+        $this->actingAs($user)
+            ->get(route('dashboard'))
+            ->assertSee("This month's budgets")
+            ->assertSee('Food')
+            ->assertSee('250.00')
+            ->assertSee('750.00')
+            ->assertSee('On track');
     }
 }

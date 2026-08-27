@@ -1,7 +1,9 @@
 <?php
 
 use App\Models\FinancialAccount;
+use App\Models\Budget;
 use App\Models\Transaction;
+use Carbon\Carbon;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -86,6 +88,30 @@ new #[Layout('layouts.app')] class extends Component
             ->orderByDesc('total')
             ->get();
     }
+
+    public function getCurrentMonthBudgetsProperty()
+    {
+        $monthStart = Carbon::now()->startOfMonth()->toDateString();
+        $monthEnd = Carbon::now()->endOfMonth()->toDateString();
+        $spent = Transaction::query()
+            ->join('financial_accounts', 'financial_accounts.id', '=', 'transactions.financial_account_id')
+            ->selectRaw('COALESCE(SUM(transactions.amount), 0)')
+            ->whereColumn('transactions.category_id', 'budgets.category_id')
+            ->whereBetween('transactions.transaction_date', [$monthStart, $monthEnd])
+            ->whereColumn('financial_accounts.currency', 'budgets.currency')
+            ->where('transactions.user_id', Auth::id())
+            ->where('financial_accounts.user_id', Auth::id())
+            ->where('transactions.type', 'expense');
+
+        return Auth::user()->budgets()
+            ->with('category')
+            ->whereDate('start_date', $monthStart)
+            ->whereDate('end_date', $monthEnd)
+            ->select('budgets.*')
+            ->selectSub($spent, 'spent')
+            ->orderBy('category_id')
+            ->get();
+    }
 }; ?>
 
 <x-slot name="header">
@@ -137,6 +163,26 @@ new #[Layout('layouts.app')] class extends Component
                     </article>
                 @empty
                     <p class="text-sm text-gray-600">{{ __('Add a financial account to see your balances.') }}</p>
+                @endforelse
+            </div>
+        </section>
+
+        <section class="bg-white p-6 shadow-sm sm:rounded-lg">
+            <h3 class="text-lg font-medium text-gray-900">{{ __('This month\'s budgets') }}</h3>
+            <div class="mt-6 space-y-4">
+                @forelse ($this->currentMonthBudgets as $budget)
+                    <article class="flex flex-col gap-2 border border-gray-200 rounded-md p-4 sm:flex-row sm:items-center sm:justify-between">
+                        <div>
+                            <h4 class="font-medium text-gray-900">{{ $budget->category->name }}</h4>
+                            <p class="text-sm text-gray-600">{{ $budget->currency }} · {{ number_format((float) ($budget->spent ?? 0), 2) }} / {{ number_format((float) $budget->amount, 2) }} {{ __('spent') }}</p>
+                        </div>
+                        <div class="text-left sm:text-right">
+                            <p class="font-medium {{ $budget->remaining < 0 ? 'text-red-600' : 'text-gray-900' }}">{{ number_format($budget->remaining, 2) }} {{ __('remaining') }}</p>
+                            <p class="text-sm {{ $budget->status === 'Over budget' ? 'text-red-600' : ($budget->status === 'Near limit' ? 'text-yellow-600' : 'text-green-600') }}">{{ $budget->status }}</p>
+                        </div>
+                    </article>
+                @empty
+                    <p class="text-sm text-gray-600">{{ __('No budgets for this month.') }}</p>
                 @endforelse
             </div>
         </section>
