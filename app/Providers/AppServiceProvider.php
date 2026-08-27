@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Models\FinancialAccount;
+use App\Models\Transaction;
 use App\Policies\FinancialAccountPolicy;
+use App\Policies\TransactionPolicy;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
@@ -23,5 +25,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Gate::policy(FinancialAccount::class, FinancialAccountPolicy::class);
+        Gate::policy(Transaction::class, TransactionPolicy::class);
     }
 }

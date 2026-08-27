@@ -17,4 +17,8 @@ Volt::route('financial-accounts', 'financial-accounts.index')
     ->middleware(['auth'])
     ->name('financial-accounts.index');
 
+Volt::route('transactions', 'transactions.index')
+    ->middleware(['auth'])
+    ->name('transactions.index');
+
 require __DIR__.'/auth.php';

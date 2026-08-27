@@ -36,6 +36,9 @@ new class extends Component
                     <x-nav-link :href="route('financial-accounts.index')" :active="request()->routeIs('financial-accounts.*')" wire:navigate>
                         {{ __('Financial Accounts') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('transactions.index')" :active="request()->routeIs('transactions.*')" wire:navigate>
+                        {{ __('Transactions') }}
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -89,6 +92,9 @@ new class extends Component
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('financial-accounts.index')" :active="request()->routeIs('financial-accounts.*')" wire:navigate>
                 {{ __('Financial Accounts') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('transactions.index')" :active="request()->routeIs('transactions.*')" wire:navigate>
+                {{ __('Transactions') }}
             </x-responsive-nav-link>
         </div>
 
