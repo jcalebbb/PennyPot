@@ -33,4 +33,8 @@ Volt::route('reports', 'reports.index')
     ->middleware(['auth'])
     ->name('reports.index');
 
+Volt::route('recurring-transactions', 'recurring-transactions.index')
+    ->middleware(['auth'])
+    ->name('recurring-transactions.index');
+
 require __DIR__.'/auth.php';

@@ -2,28 +2,33 @@
 
 namespace App\Models;
 
-use Database\Factories\TransactionFactory;
+use Database\Factories\RecurringTransactionFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-#[Fillable(['financial_account_id', 'category_id', 'recurring_transaction_id', 'type', 'description', 'amount', 'transaction_date'])]
-class Transaction extends Model
+#[Fillable(['financial_account_id', 'category_id', 'type', 'description', 'amount', 'frequency', 'start_date', 'next_occurrence', 'end_date', 'is_active'])]
+class RecurringTransaction extends Model
 {
-    /** @use HasFactory<TransactionFactory> */
+    /** @use HasFactory<RecurringTransactionFactory> */
     use HasFactory;
 
-    public const TYPES = [
-        'income',
-        'expense',
+    public const FREQUENCIES = [
+        'daily',
+        'weekly',
+        'monthly',
+        'yearly',
     ];
 
     protected function casts(): array
     {
         return [
             'amount' => 'decimal:2',
-            'transaction_date' => 'date',
+            'start_date' => 'date',
+            'next_occurrence' => 'date',
+            'end_date' => 'date',
+            'is_active' => 'boolean',
         ];
     }
 
@@ -40,10 +45,5 @@ class Transaction extends Model
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
-    }
-
-    public function recurringTransaction(): BelongsTo
-    {
-        return $this->belongsTo(RecurringTransaction::class);
     }
 }
