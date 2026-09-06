@@ -223,6 +223,10 @@ class RecurringTransactionTest extends TestCase
 
         $this->actingAs($user)->get(route('dashboard'))->assertSee('965.00');
         $this->get(route('budgets.index'))->assertSee('35.00');
-        $this->get(route('reports.index'))->assertSee('Generated');
+        Volt::test('reports.index')
+            ->set('preset', 'custom')
+            ->set('start_date', '2026-08-01')
+            ->set('end_date', '2026-08-31')
+            ->assertSee('Generated');
     }
 }
