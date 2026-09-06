@@ -205,12 +205,12 @@ new #[Layout('layouts.app')] class extends Component
 }; ?>
 
 <x-slot name="header">
-    <h2 class="font-semibold text-xl text-gray-800 leading-tight">{{ __('Reports') }}</h2>
+    <x-page-header :title="__('Reports')" :description="__('Explore cash flow, activity, categories, and budget performance.')" />
 </x-slot>
 
-<div class="py-12">
-    <div class="max-w-7xl mx-auto space-y-6 sm:px-6 lg:px-8">
-        <section class="bg-white p-6 shadow-sm sm:rounded-lg">
+<div class="bg-slate-50 py-10">
+    <div class="mx-auto max-w-7xl space-y-6 px-4 sm:px-6 lg:px-8">
+        <section class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
             <form wire:submit="applyFilters" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:items-end">
                 <div>
                     <x-input-label for="preset" :value="__('Date range')" />
@@ -238,7 +238,7 @@ new #[Layout('layouts.app')] class extends Component
 
         <section class="grid gap-6 sm:grid-cols-3">
             @forelse ($this->summaryTotals as $total)
-                <article class="bg-white p-6 shadow-sm sm:rounded-lg sm:col-span-3">
+                <article class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm sm:col-span-3">
                     <h3 class="text-lg font-medium text-gray-900">{{ $total->currency }}</h3>
                     <div class="mt-4 grid gap-4 sm:grid-cols-3">
                         <div><p class="text-sm text-gray-600">{{ __('Income') }}</p><p class="text-xl font-semibold text-green-600">{{ number_format((float) $total->total_income, 2) }}</p></div>
@@ -247,11 +247,11 @@ new #[Layout('layouts.app')] class extends Component
                     </div>
                 </article>
             @empty
-                <article class="bg-white p-6 shadow-sm sm:rounded-lg sm:col-span-3"><p class="text-sm text-gray-600">{{ __('No report data for this date range.') }}</p></article>
+                <article class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm sm:col-span-3"><p class="text-sm text-gray-600">{{ __('No report data for this date range.') }}</p></article>
             @endforelse
         </section>
 
-        <section class="bg-white p-6 shadow-sm sm:rounded-lg">
+        <section class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
             <h3 class="text-lg font-medium text-gray-900">{{ __('Monthly trend') }}</h3>
             <div class="mt-6 overflow-x-auto">
                 @if ($this->monthlyTrends->isEmpty()) <p class="text-sm text-gray-600">{{ __('No monthly activity for this date range.') }}</p> @else

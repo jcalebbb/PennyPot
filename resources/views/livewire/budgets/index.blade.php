@@ -179,14 +179,12 @@ new #[Layout('layouts.app')] class extends Component
 }; ?>
 
 <x-slot name="header">
-    <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        {{ __('Budgets') }}
-    </h2>
+    <x-page-header :title="__('Budgets')" :description="__('Set monthly limits and keep spending on track.')" />
 </x-slot>
 
-<div class="py-12">
-    <div class="max-w-7xl mx-auto space-y-6 sm:px-6 lg:px-8">
-        <section class="p-6 bg-white shadow-sm sm:rounded-lg">
+<div class="bg-slate-50 py-10">
+    <div class="mx-auto max-w-7xl space-y-6 px-4 sm:px-6 lg:px-8">
+        <section class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
             <header>
                 <h3 class="text-lg font-medium text-gray-900">
                     {{ $editingBudgetId ? __('Edit budget') : __('Add budget') }}
@@ -238,7 +236,7 @@ new #[Layout('layouts.app')] class extends Component
             </form>
         </section>
 
-        <section class="p-6 bg-white shadow-sm sm:rounded-lg">
+        <section class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
             <header>
                 <h3 class="text-lg font-medium text-gray-900">{{ __('Your budgets') }}</h3>
             </header>
