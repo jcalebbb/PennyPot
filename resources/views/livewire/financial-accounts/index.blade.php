@@ -106,7 +106,7 @@ new #[Layout('layouts.app')] class extends Component
 
 <div class="bg-slate-50 py-10">
     <div class="mx-auto max-w-7xl space-y-6 px-4 sm:px-6 lg:px-8">
-        <section class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+        <section class="pp-surface rounded-xl border border-white/70 p-5 dark:border-slate-700 sm:p-6">
             <header>
                 <h3 class="text-lg font-medium text-gray-900">
                     {{ $editingAccountId ? __('Edit financial account') : __('Add financial account') }}
@@ -160,7 +160,7 @@ new #[Layout('layouts.app')] class extends Component
             </form>
         </section>
 
-        <section class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+        <section class="pp-surface rounded-xl border border-white/70 p-5 dark:border-slate-700 sm:p-6">
             <header>
                 <h3 class="text-lg font-medium text-gray-900">{{ __('Your accounts') }}</h3>
             </header>

@@ -3,8 +3,77 @@
 @tailwind utilities;
 
 @layer components {
+	:root {
+		--pp-bg: #eaf1f8;
+		--pp-surface: #f4f8fc;
+		--pp-brand: #003479;
+		--pp-accent: #0097b2;
+		--pp-accent-secondary: #7ed957;
+		--pp-text: #0b1f33;
+		--pp-muted: #5b6b7a;
+		--pp-success: #20b486;
+		--pp-error: #e05252;
+	}
+
+	.dark {
+		--pp-bg: #071a2e;
+		--pp-surface: #0d2743;
+		--pp-brand: #003479;
+		--pp-accent: #0097b2;
+		--pp-accent-secondary: #7ed957;
+		--pp-text: #f4f8fc;
+		--pp-muted: #a9bbcc;
+	}
+
+	body {
+		background: var(--pp-bg);
+		color: var(--pp-text);
+	}
+
+	.pp-surface {
+		background: var(--pp-surface);
+		box-shadow: 8px 8px 18px rgba(0, 52, 121, 0.08), -8px -8px 18px rgba(255, 255, 255, 0.72);
+	}
+
+	.dark .pp-surface {
+		box-shadow: 8px 8px 18px rgba(0, 0, 0, 0.28), -6px -6px 16px rgba(18, 61, 99, 0.35);
+	}
+
+	.pp-accent {
+		background-image: linear-gradient(110deg, var(--pp-accent), var(--pp-accent-secondary));
+		color: #071a2e;
+	}
+
+	.pp-accent-solid {
+		background: var(--pp-accent);
+		color: white;
+	}
+
+	.pp-inset {
+		background: var(--pp-bg);
+		box-shadow: inset 2px 2px 6px rgba(0, 52, 121, 0.1), inset -2px -2px 6px rgba(255, 255, 255, 0.75);
+	}
+
+	.dark .pp-inset {
+		box-shadow: inset 2px 2px 6px rgba(0, 0, 0, 0.3), inset -2px -2px 6px rgba(18, 61, 99, 0.3);
+	}
+
+	.dark .text-gray-900 { color: #f4f8fc; }
+	.dark .text-gray-800 { color: #eaf1f8; }
+	.dark .text-gray-700,
+	.dark .text-gray-600 { color: #a9bbcc; }
+	.dark .text-gray-500 { color: #8197ab; }
+	.dark .bg-white { background-color: var(--pp-surface); }
+	.dark .border-gray-100,
+	.dark .border-gray-200 { border-color: #214565; }
+
 	input.border-gray-300,
 	select.border-gray-300 {
-		@apply rounded-md border-slate-300 bg-white text-sm text-slate-900 shadow-sm focus:border-emerald-500 focus:ring-emerald-500;
+		@apply rounded-lg border-slate-300 bg-white text-sm text-slate-900 shadow-sm focus:border-[#0097B2] focus:ring-[#0097B2];
+	}
+
+	.dark input.border-gray-300,
+	.dark select.border-gray-300 {
+		@apply border-slate-600 bg-slate-800 text-slate-100;
 	}
 }

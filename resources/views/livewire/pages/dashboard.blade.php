@@ -122,33 +122,33 @@ new #[Layout('layouts.app')] class extends Component
     <div class="mx-auto max-w-7xl space-y-6 px-4 sm:px-6 lg:px-8">
         <section class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             @forelse ($this->balanceTotals as $total)
-                <article class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+                <article class="pp-surface rounded-xl border border-white/70 p-6 dark:border-slate-700">
                     <p class="text-sm text-gray-600">{{ $total['currency'] }} {{ __('total balance') }}</p>
                     <p class="mt-2 text-2xl font-semibold text-gray-900">{{ number_format($total['amount'], 2) }}</p>
                 </article>
             @empty
-                <article class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm sm:col-span-2 lg:col-span-4">
+                <article class="pp-surface rounded-xl border border-white/70 p-6 dark:border-slate-700 sm:col-span-2 lg:col-span-4">
                     <p class="text-sm text-gray-600">{{ __('No financial accounts yet.') }}</p>
                 </article>
             @endforelse
 
             @foreach ($this->cashFlowTotals as $total)
-                <article class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+                <article class="pp-surface rounded-xl border border-white/70 p-6 dark:border-slate-700">
                     <p class="text-sm text-gray-600">{{ $total->currency }} {{ __('income') }}</p>
                     <p class="mt-2 text-2xl font-semibold text-green-600">{{ number_format((float) $total->total_income, 2) }}</p>
                 </article>
-                <article class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+                <article class="pp-surface rounded-xl border border-white/70 p-6 dark:border-slate-700">
                     <p class="text-sm text-gray-600">{{ $total->currency }} {{ __('expenses') }}</p>
                     <p class="mt-2 text-2xl font-semibold text-gray-900">{{ number_format((float) $total->total_expenses, 2) }}</p>
                 </article>
-                <article class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+                <article class="pp-surface rounded-xl border border-white/70 p-6 dark:border-slate-700">
                     <p class="text-sm text-gray-600">{{ $total->currency }} {{ __('net cash flow') }}</p>
                     <p class="mt-2 text-2xl font-semibold {{ $total->net_cash_flow >= 0 ? 'text-green-600' : 'text-red-600' }}">{{ number_format((float) $total->net_cash_flow, 2) }}</p>
                 </article>
             @endforeach
         </section>
 
-        <section class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+        <section class="pp-surface rounded-xl border border-white/70 p-5 dark:border-slate-700 sm:p-6">
             <h3 class="text-lg font-medium text-gray-900">{{ __('Accounts') }}</h3>
             <div class="mt-6 space-y-4">
                 @forelse ($this->accountBalances as $account)
@@ -165,7 +165,7 @@ new #[Layout('layouts.app')] class extends Component
             </div>
         </section>
 
-        <section class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+        <section class="pp-surface rounded-xl border border-white/70 p-5 dark:border-slate-700 sm:p-6">
             <h3 class="text-lg font-medium text-gray-900">{{ __('This month\'s budgets') }}</h3>
             <div class="mt-6 space-y-4">
                 @forelse ($this->currentMonthBudgets as $budget)

@@ -14,13 +14,13 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans antialiased text-slate-900">
-        <div class="min-h-screen bg-slate-50">
+    <body class="font-sans antialiased text-slate-900 dark:text-slate-100">
+        <div class="min-h-screen bg-[var(--pp-bg)]">
             <livewire:layout.navigation />
 
             <!-- Page Heading -->
             @if (isset($header))
-                <header class="border-b border-slate-200 bg-white">
+                <header class="border-b border-slate-200 bg-[var(--pp-surface)] dark:border-slate-700">
                     <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
                         {{ $header }}
                     </div>

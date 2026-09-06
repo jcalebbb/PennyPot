@@ -16,7 +16,7 @@ new class extends Component
     }
 }; ?>
 
-<nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
+<nav x-data="{ open: false }" class="border-b border-slate-200 bg-[var(--pp-surface)] dark:border-slate-700">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
@@ -24,8 +24,8 @@ new class extends Component
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}" class="flex items-center gap-3" wire:navigate>
-                        <x-application-logo class="block h-9 w-auto fill-current text-emerald-600" />
-                        <span class="font-semibold tracking-tight text-gray-800">{{ __('PennyPot') }}</span>
+                        <x-application-logo class="block h-9 w-auto fill-current text-[#0097B2]" />
+                        <span class="font-semibold tracking-tight text-[var(--pp-brand)] dark:text-white">{{ __('PennyPot') }}</span>
                     </a>
                 </div>
 
@@ -83,6 +83,9 @@ new class extends Component
                         </button>
                     </x-slot>
                 </x-dropdown>
+                <button x-data="themeToggle" type="button" @click="toggle" class="ms-3 rounded-lg border border-slate-300 bg-[var(--pp-surface)] px-3 py-2 text-xs font-semibold text-[var(--pp-brand)] shadow-sm transition hover:border-[#0097B2] focus:outline-none focus:ring-2 focus:ring-[#0097B2] dark:border-slate-600 dark:text-slate-100" aria-label="Toggle color theme">
+                    <span x-text="darkMode ? 'Light' : 'Dark'"></span>
+                </button>
             </div>
 
             <!-- Hamburger -->
